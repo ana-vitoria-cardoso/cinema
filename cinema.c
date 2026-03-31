@@ -122,15 +122,12 @@ void display() {
 
     glLoadIdentity();
 
-    // câmera com zoom
     gluLookAt(0, 5, distancia,
               0, 0, 0,
               0, 1, 0);
 
-    // rotação com mouse
     glRotatef(anguloY, 0, 1, 0);
 
-    // cena
     desenharChao();
     desenharTeto();
     desenharParedes();
@@ -139,6 +136,7 @@ void display() {
     desenharLuzes();
 
     glutSwapBuffers();
+    glutPostRedisplay();
 }
 
 // MOUSE 
@@ -170,6 +168,11 @@ void motion(int x, int y) {
 
 void init() {
     glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
+
+    glClearColor(0.0, 0.0, 0.0, 1.0);
+
+    glViewport(0, 0, 800, 800);
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
