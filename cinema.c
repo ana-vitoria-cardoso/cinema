@@ -5,27 +5,24 @@
 
 //controle camera
 float anguloY = 0.0;
+float anguloX = 0.0; // NOVO (vertical)
 float distancia = 15.0;
 
-int ultimoX;
+int ultimoX, ultimoY; // CORRIGIDO
 int botaoPressionado = 0;
 
 
 //objetos da cena
-//chao
 void desenharChao() {
     glColor3f(0.2, 0.2, 0.2);
-
     glPushMatrix();
     glScalef(12, 0.1, 12);
     glutSolidCube(1);
     glPopMatrix();
 }
 
-//teto
 void desenharTeto() {
     glColor3f(0.15, 0.15, 0.15);
-
     glPushMatrix();
     glTranslatef(0, 6, 0);
     glScalef(12, 0.1, 12);
@@ -33,25 +30,21 @@ void desenharTeto() {
     glPopMatrix();
 }
 
-//parede
 void desenharParedes() {
     glColor3f(0.1, 0.1, 0.1);
 
-    //fundo
     glPushMatrix();
     glTranslatef(0, 3, -6);
     glScalef(12, 6, 0.2);
     glutSolidCube(1);
     glPopMatrix();
 
-    //esq
     glPushMatrix();
     glTranslatef(-6, 3, 0);
     glScalef(0.2, 6, 12);
     glutSolidCube(1);
     glPopMatrix();
 
-    //dir
     glPushMatrix();
     glTranslatef(6, 3, 0);
     glScalef(0.2, 6, 12);
@@ -59,10 +52,8 @@ void desenharParedes() {
     glPopMatrix();
 }
 
-//tela
 void desenharTela() {
     glColor3f(0.9, 0.9, 0.9);
-
     glPushMatrix();
     glTranslatef(0, 4, -5);
     glScalef(8, 4, 0.2);
@@ -70,26 +61,22 @@ void desenharTela() {
     glPopMatrix();
 }
 
-//cadeira
 void desenharCadeira() {
-    //assento
     glColor3f(0.6, 0.0, 0.0);
     glPushMatrix();
     glScalef(0.8, 0.3, 0.8);
     glutSolidCube(1);
     glPopMatrix();
 
-    //encosto
     glPushMatrix();
     glTranslatef(0, 0.5, 0.3);
     glScalef(0.8, 1.0, 0.2);
     glutSolidCube(1);
     glPopMatrix();
 }
-//escada
+
 void desenharEscadas() {
     glColor3f(0.3, 0.3, 0.3);
-
     int linha = 0;
 
     for(int z = -2; z <= 4; z += 2) {
@@ -132,7 +119,6 @@ void desenharLuzesEscada() {
     }
 }
 
-//fileira
 void desenharCadeiras() {
     int linha = 0;
 
@@ -148,7 +134,6 @@ void desenharCadeiras() {
     }
 }
 
-//luz
 void desenharLuzes() {
     glColor3f(1.0, 1.0, 0.0);
 
@@ -164,24 +149,24 @@ void desenharLuzes() {
         glPopMatrix();
     }
 }
+
 void desenharCaixasSom() {
     glColor3f(0.05, 0.05, 0.05);
 
-    //esquerda
     glPushMatrix();
     glTranslatef(-4.5, 5, -4);
     glScalef(0.6, 1.2, 0.6);
     glutSolidCube(1);
     glPopMatrix();
 
-    //direita
     glPushMatrix();
     glTranslatef(4.5, 5, -4);
     glScalef(0.6, 1.2, 0.6);
     glutSolidCube(1);
     glPopMatrix();
+
     glColor3f(0.2, 0.2, 0.2);
-    //esferas
+
     glPushMatrix();
     glTranslatef(-4.5, 5, -3.5);
     glutSolidSphere(0.2, 20, 20);
@@ -201,7 +186,6 @@ void desenharPorta() {
     glutSolidCube(1);
     glPopMatrix();
 
-    //folha
     glColor3f(0.2, 0.1, 0.05);
     glPushMatrix();
     glTranslatef(5.85, 1.5, -4.0); 
@@ -209,23 +193,24 @@ void desenharPorta() {
     glutSolidCube(1);
     glPopMatrix();
     
-    //maçaneta
     glColor3f(0.8, 0.7, 0.2);
     glPushMatrix();
     glTranslatef(5.75, 1.5, -3.0);
     glutSolidSphere(0.08, 10, 10);
     glPopMatrix();
 }
+
 //display
 void display() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glLoadIdentity();
-    glRotatef(anguloY, 0, 1, 0);
     gluLookAt(0, 5, distancia,
               0, 0, 0,
               0, 1, 0);
-    
+
+    glRotatef(anguloX, 1, 0, 0); // vertical
+    glRotatef(anguloY, 0, 1, 0); // horizontal
 
     desenharChao();
     desenharTeto();
@@ -233,49 +218,50 @@ void display() {
     desenharPorta();
     desenharTela();
     desenharEscadas();
-    desenharLuzesEscada ();
+    desenharLuzesEscada();
     desenharCadeiras();
-    desenharParedeEscada ();
+    desenharParedeEscada();
     desenharLuzes();
     desenharCaixasSom();
+
     glutSwapBuffers();
     glutPostRedisplay();
 }
 
-// MOUSE 
+// mouse clique
 void mouse(int button, int state, int x, int y) {
     if (button == GLUT_LEFT_BUTTON) {
         if (state == GLUT_DOWN) {
             botaoPressionado = 1;
             ultimoX = x;
+            ultimoY = y;
         } else {
             botaoPressionado = 0;
         }
     }
 
-    // zoom
-    if (button == 3) distancia -= 1.0; // scroll up
-    if (button == 4) distancia += 1.0; // scroll down
+    if (button == 3) distancia -= 1.0;
+    if (button == 4) distancia += 1.0;
 
     glutPostRedisplay();
 }
 
-// MOUSE (movimento)
+// mouse movimento
 void motion(int x, int y) {
     if (botaoPressionado) {
         anguloY += (x - ultimoX) * 0.5;
+        anguloX += (y - ultimoY) * 0.5;
+
         ultimoX = x;
+        ultimoY = y;
+
         glutPostRedisplay();
     }
 }
 
 void init() {
     glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_LESS);
-
     glClearColor(0.0, 0.0, 0.0, 1.0);
-
-    glViewport(0, 0, 800, 800);
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
