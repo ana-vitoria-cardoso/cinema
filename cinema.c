@@ -5,10 +5,10 @@
 
 //controle camera
 float anguloY = 0.0;
-float anguloX = 0.0; // NOVO (vertical)
+float anguloX = 0.0;
 float distancia = 15.0;
 
-int ultimoX, ultimoY; // CORRIGIDO
+int ultimoX, ultimoY;
 int botaoPressionado = 0;
 
 
@@ -209,8 +209,8 @@ void display() {
               0, 0, 0,
               0, 1, 0);
 
-    glRotatef(anguloX, 1, 0, 0); // vertical
-    glRotatef(anguloY, 0, 1, 0); // horizontal
+    glRotatef(anguloX, 1, 0, 0);
+    glRotatef(anguloY, 0, 1, 0);
 
     desenharChao();
     desenharTeto();
