@@ -1,6 +1,10 @@
+//
+//
 #include <GL/glut.h>
+#include <stdio.h>
 #include "camera.h"
 #include "obj.h"
+#include "textura.h"
 
 void display() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -12,9 +16,10 @@ void display() {
     
     glRotatef(anguloX, 1, 0, 0);
     glRotatef(anguloY, 0, 1, 0);
-    desenharChao();
+    
+    desenharChaoComTextura();
     desenharTeto();
-    desenharParedes();
+    desenharParedesComTextura();  
     desenharCorredorLateral();
     desenharEscadaria();
     desenharPorta();
@@ -22,7 +27,6 @@ void display() {
     desenharPlateia();
     desenharLuzes();
     desenharCaixasSom();
-    
     glutSwapBuffers();
     glutPostRedisplay();
 }
@@ -30,11 +34,10 @@ void display() {
 void init() {
     glEnable(GL_DEPTH_TEST);
     glClearColor(0.0, 0.0, 0.0, 1.0);
-    
+    carregarTexturas();
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     gluPerspective(55, 1.0, 0.8, 60.0);
-    
     glMatrixMode(GL_MODELVIEW);
 }
 
@@ -52,11 +55,10 @@ int main(int argc, char** argv) {
     glutMotionFunc(controlarCameraMotion);
     glutKeyboardFunc(controlarCameraTeclado);
     glutSpecialFunc(controlarCameraEspecial);
-    
     glutMainLoop();
     return 0;
 }
 
 //compilar
-// gcc -o cinema.exe main.c camera.c obj.c -lfreeglut -lopengl32 -lglu32 -lm -Wall
+// gcc -o cinema.exe main.c camera.c obj.c image.c textura.c-lfreeglut -lopengl32 -lglu32 -lm -Wall
 //./cinema.exe

@@ -2,22 +2,25 @@ CC = gcc
 CFLAGS = -Wall
 LIBS = -lfreeglut -lopengl32 -lglu32 -lm
 
-all: cinema
+# Arquivos fonte
+SRCS = main.c camera.c obj.c textura.c image.c
+OBJS = $(SRCS:.c=.o)
+TARGET = cinema.exe
 
-cinema: main.o camera.o obj.o
-	$(CC) -o cinema.exe main.o camera.o obj.o $(LIBS)
+all: $(TARGET)
 
-main.o: main.c camera.h obj.h
-	$(CC) $(CFLAGS) -c main.c
+$(TARGET): $(OBJS)
+	$(CC) -o $(TARGET) $(OBJS) $(LIBS)
 
-camera.o: camera.c camera.h
-	$(CC) $(CFLAGS) -c camera.c
-
-obj.o: obj.c obj.h
-	$(CC) $(CFLAGS) -c obj.c
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -f *.o cinema.exe
+	del *.o $(TARGET)
 
-run: cinema.exe
-	./cinema.exe
+run: $(TARGET)
+	$(TARGET)
+
+
+compilar:
+	gcc -o cinema.exe main.c camera.c obj.c textura.c image.c -lfreeglut -lopengl32 -lglu32 -lm -Wall
