@@ -1,3 +1,5 @@
+// Ana Vitória Cardoso Queiroz - 172706
+// Maria Clara Muharem - 266864
 #ifndef CAMERA_H
 #define CAMERA_H
 
@@ -5,6 +7,7 @@
 extern float anguloY;
 extern float anguloX;
 extern float distancia;
+// Removeu distanciaMin e distanciaMax
 
 //funcoes
 void initCamera();

@@ -1,3 +1,6 @@
+// Ana Vitória Cardoso Queiroz - 172706
+// Maria Clara Muharem - 266864
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>

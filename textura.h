@@ -1,3 +1,6 @@
+// Ana Vitória Cardoso Queiroz - 172706
+// Maria Clara Muharem - 266864
+
 #ifndef TEXTURA_H
 #define TEXTURA_H
 

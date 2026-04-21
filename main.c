@@ -1,5 +1,6 @@
-//
-//
+// Ana Vitória Cardoso Queiroz - 172706
+// Maria Clara Muharem - 266864
+
 #include <GL/glut.h>
 #include <stdio.h>
 #include "camera.h"

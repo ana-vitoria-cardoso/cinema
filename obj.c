@@ -1,3 +1,6 @@
+// Ana Vitória Cardoso Queiroz - 172706
+// Maria Clara Muharem - 266864
+
 #include "obj.h"
 #include <GL/glut.h>
 #include <math.h>

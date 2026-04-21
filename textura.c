@@ -1,3 +1,6 @@
+// Ana Vitória Cardoso Queiroz - 172706
+// Maria Clara Muharem - 266864
+
 #include "textura.h"
 #include "image.h"
 #include "obj.h" 
