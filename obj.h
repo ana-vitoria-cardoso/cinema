@@ -16,6 +16,7 @@ void desenharCorredorLateral();
 void desenharEscadaria();
 void desenharPorta();
 void desenharCaixasSom();
+void desenharFeixeLuz();
 
 //texturas
 void desenharChaoComTextura();     

@@ -22,7 +22,7 @@ void display()
     glRotatef(anguloY, 0, 1, 0);
 
     // AGORA sim posiciona a luz (na tela)
-    GLfloat luz_pos[] = {0.0, 7.0, -20.0, 1.0};
+    GLfloat luz_pos[] = {0.0, 5.0, -23.0, 1.0}; // exatamente na tela
     glLightfv(GL_LIGHT0, GL_POSITION, luz_pos);
 
     // desenhar cena
@@ -33,6 +33,7 @@ void display()
     desenharEscadaria();
     desenharPorta();
     desenharTela();
+    desenharFeixeLuz();
     desenharPlateia();
     desenharLuzes();
     desenharCaixasSom();
@@ -83,6 +84,13 @@ void init()
 
     glMaterialfv(GL_FRONT, GL_SPECULAR, mat_spec);
     glMaterialfv(GL_FRONT, GL_SHININESS, brilho);
+
+    // ===== SPOTLIGHT (cone de luz) =====
+    GLfloat spot_dir[] = {0.0, -0.2, 1.0}; // aponta da tela para a plateia
+
+    glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, spot_dir);
+    glLightf(GL_LIGHT0, GL_SPOT_CUTOFF, 40.0);   // abertura do cone
+    glLightf(GL_LIGHT0, GL_SPOT_EXPONENT, 15.0); // concentração da luz
 }
 
 int main(int argc, char **argv)

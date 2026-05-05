@@ -497,3 +497,37 @@ void desenharCaixasSom() {
     glutSolidSphere(0.4, 20, 20);
     glPopMatrix();
 }
+
+void desenharFeixeLuz() {
+    glDisable(GL_LIGHTING);
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // ✅ CORRETO
+
+    glDepthMask(GL_FALSE); // 🔥 MUITO IMPORTANTE (não “apaga” objetos atrás)
+
+    glColor4f(1.0, 1.0, 0.85, 0.12);
+
+    glPushMatrix();
+    glTranslatef(0, 5.0, -23.0);
+
+    glBegin(GL_TRIANGLE_FAN);
+        glVertex3f(0, 0, 0);
+
+        for (int i = 0; i <= 30; i++) {
+            float ang = i * 2 * 3.14159 / 30;
+
+            float x = cos(ang) * 12;
+            float y = sin(ang) * 6;
+
+            glVertex3f(x, y, 45);
+        }
+    glEnd();
+
+    glPopMatrix();
+
+    glDepthMask(GL_TRUE); // 🔥 volta ao normal
+
+    glDisable(GL_BLEND);
+    glEnable(GL_LIGHTING);
+}
