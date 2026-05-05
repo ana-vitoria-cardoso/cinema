@@ -13,6 +13,8 @@ int texturasAtivas = 1;
 IMAGE *textureImage = NULL;
 
 void carregarTexturas() {
+    
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
     //parede
     textureImage = ImageLoad("wall.rgb");
   {
@@ -71,6 +73,7 @@ void toggleTexturas() {
 }
 
 void aplicarTexturaNaParede(float x1, float y1, float z1, float x2, float y2, float z2, float repX, float repY) {
+    glNormal3f(0.0, 0.0, 1.0);
     glBegin(GL_QUADS);
     glTexCoord2f(0.0f, 0.0f); glVertex3f(x1, y1, z1);
     glTexCoord2f(repX, 0.0f); glVertex3f(x2, y1, z2);
@@ -80,6 +83,7 @@ void aplicarTexturaNaParede(float x1, float y1, float z1, float x2, float y2, fl
 }
 
 void aplicarTexturaNoChao(float x1, float y1, float z1, float x2, float y2, float z2, float repX, float repZ) {
+    glNormal3f(0.0, 1.0, 0.0);
     glBegin(GL_QUADS);
     glTexCoord2f(0.0f, 0.0f); glVertex3f(x1, y1, z1);
     glTexCoord2f(repX, 0.0f); glVertex3f(x2, y1, z1);

@@ -305,6 +305,7 @@ void desenharParedes() {
 }
 
 void desenharTela() {
+    // moldura externa
     glColor3f(0.85, 0.72, 0.35);
     glPushMatrix();
     glTranslatef(0, 5.0, -23.5);  
@@ -312,13 +313,23 @@ void desenharTela() {
     glutSolidCube(1);
     glPopMatrix();
     
-    glColor3f(0.98, 0.98, 1.0);
+    // ===== TELA (AGORA EMITE LUZ) =====
+    GLfloat emissive[] = {1.2, 1.2, 1.2, 1.0};
+    glMaterialfv(GL_FRONT, GL_EMISSION, emissive);
+
+    glColor3f(1.0, 1.0, 1.0);
     glPushMatrix();
     glTranslatef(0, 5.0, -23.3);  
     glScalef(11.5, 7.5, 0.05);    
     glutSolidCube(1);
     glPopMatrix();
-    
+
+    // desliga emissão (IMPORTANTE!)
+    GLfloat no_emissive[] = {0.0, 0.0, 0.0, 1.0};
+    glMaterialfv(GL_FRONT, GL_EMISSION, no_emissive);
+    // ==================================
+
+    // laterais
     glColor3f(0.65, 0.12, 0.15);
     glPushMatrix();
     glTranslatef(-6.5, 5.0, -23); 
@@ -332,6 +343,7 @@ void desenharTela() {
     glutSolidCube(1);
     glPopMatrix();
     
+    // topo
     glPushMatrix();
     glTranslatef(0, 8.8, -23);    
     glScalef(13, 0.8, 0.5);
@@ -343,31 +355,49 @@ void desenharLuzes() {
     glColor3f(0.85, 0.72, 0.35);
   
     for(float z = -20; z <= 25; z += 3.5) {
+
+        // ===== LADO ESQUERDO =====
         glColor3f(0.85, 0.72, 0.35);
         glPushMatrix();
         glTranslatef(-15.5, 4.5, z);  
         glScalef(0.2, 0.8, 0.2);
         glutSolidCube(1);
         glPopMatrix();
-        
+
+        // esfera com EMISSÃO (brilho)
+        GLfloat emissive[] = {1.0, 0.8, 0.3, 1.0};
+        glMaterialfv(GL_FRONT, GL_EMISSION, emissive);
+
         glColor3f(1.0, 0.7, 0.3);
         glPushMatrix();
         glTranslatef(-15.5, 4.2, z); 
         glutSolidSphere(0.15, 12, 12);
         glPopMatrix();
-        
+
+        GLfloat no_emissive[] = {0.0, 0.0, 0.0, 1.0};
+        glMaterialfv(GL_FRONT, GL_EMISSION, no_emissive);
+
+
+        // ===== LADO DIREITO =====
         glColor3f(0.85, 0.72, 0.35);
         glPushMatrix();
         glTranslatef(15.5, 4.5, z);  
         glScalef(0.2, 0.8, 0.2);
         glutSolidCube(1);
         glPopMatrix();
-        
+
+        // esfera com EMISSÃO (brilho)
+        GLfloat emissive2[] = {1.0, 0.8, 0.3, 1.0};
+        glMaterialfv(GL_FRONT, GL_EMISSION, emissive2);
+
         glColor3f(1.0, 0.7, 0.3);
         glPushMatrix();
         glTranslatef(15.5, 4.2, z);   
         glutSolidSphere(0.15, 12, 12);
         glPopMatrix();
+
+        GLfloat no_emissive2[] = {0.0, 0.0, 0.0, 1.0};
+        glMaterialfv(GL_FRONT, GL_EMISSION, no_emissive2);
     }
 }
 
