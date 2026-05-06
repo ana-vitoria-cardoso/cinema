@@ -72,9 +72,22 @@ void toggleTexturas() {
     glutPostRedisplay();  
 }
 
-void aplicarTexturaNaParede(float x1, float y1, float z1, float x2, float y2, float z2, float repX, float repY) {
-    glNormal3f(0.0, 0.0, 1.0);
+//função com normal específica para cada parede
+void aplicarTexturaNaParede(float x1, float y1, float z1, float x2, float y2, float z2, float repX, float repY, int paredeTipo) {
     glBegin(GL_QUADS);
+    
+    // Define a normal baseada no tipo da parede
+    switch(paredeTipo) {
+        case 0: // parede frontal (tela) - aponta para +Z
+            glNormal3f(0.0, 0.0, 1.0); break;
+        case 1: // parede esquerda - aponta para +X
+            glNormal3f(1.0, 0.0, 0.0); break;
+        case 2: // parede direita - aponta para -X
+            glNormal3f(-1.0, 0.0, 0.0); break;
+        case 3: // parede traseira - aponta para -Z
+            glNormal3f(0.0, 0.0, -1.0); break;
+    }
+    
     glTexCoord2f(0.0f, 0.0f); glVertex3f(x1, y1, z1);
     glTexCoord2f(repX, 0.0f); glVertex3f(x2, y1, z2);
     glTexCoord2f(repX, repY); glVertex3f(x2, y2, z2);
@@ -93,27 +106,32 @@ void aplicarTexturaNoChao(float x1, float y1, float z1, float x2, float y2, floa
 }
 
 void desenharParedesComTextura() {
-    if (texturasAtivas && textureIDParede != 0) {//com textura
+    if (texturasAtivas && textureIDParede != 0) {
         glEnable(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D, textureIDParede);
         glColor3f(1.0f, 1.0f, 1.0f);
-        aplicarTexturaNaParede(-16, 0, -24, 16, 9, -24, 4.0f, 3.0f);//parede tela
-        aplicarTexturaNaParede(-16, 0, -24, -16, 9, 28, 8.0f, 3.0f);//parede erq
-        aplicarTexturaNaParede(16, 0, -24, 16, 9, 28, 8.0f, 3.0f);//parede dir
-        aplicarTexturaNaParede(-16, 0, 28, 16, 9, 28, 4.0f, 3.0f);//parede tras
+        
+        // parede tela (frontal) - tipo 0
+        aplicarTexturaNaParede(-16, 0, -24, 16, 9, -24, 4.0f, 3.0f, 0);
+        // parede esquerda - tipo 1
+        aplicarTexturaNaParede(-16, 0, -24, -16, 9, 28, 8.0f, 3.0f, 1);
+        // parede direita - tipo 2
+        aplicarTexturaNaParede(16, 0, -24, 16, 9, 28, 8.0f, 3.0f, 2);
+        // parede tras - tipo 3
+        aplicarTexturaNaParede(-16, 0, 28, 16, 9, 28, 4.0f, 3.0f, 3);
         
         glDisable(GL_TEXTURE_2D);
-    } else {//sem textura parede
+    } else {
         desenharParedes();
     }
 }
 
 void desenharChaoComTextura() {
-    if (texturasAtivas && textureIDChao != 0) {//parede
+    if (texturasAtivas && textureIDChao != 0) {
         glEnable(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D, textureIDChao);
         glColor3f(1.0f, 1.0f, 1.0f);
-       //chao
+       
         aplicarTexturaNoChao(-16, -0.3, -24, 16, -0.3, 28, 8.0f, 13.0f);
         
         glDisable(GL_TEXTURE_2D);

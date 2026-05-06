@@ -10,10 +10,8 @@
 void display()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
     glLoadIdentity();
 
-    // câmera primeiro
     gluLookAt(0, 5, distancia,
               0, 3.5, 0,
               0, 1, 0);
@@ -21,11 +19,22 @@ void display()
     glRotatef(anguloX, 1, 0, 0);
     glRotatef(anguloY, 0, 1, 0);
 
-    // AGORA sim posiciona a luz (na tela)
-    GLfloat luz_pos[] = {0.0, 5.0, -23.0, 1.0}; // exatamente na tela
-    glLightfv(GL_LIGHT0, GL_POSITION, luz_pos);
+    // posições das luzes
+    GLfloat pos0[] = {0.0, 8.2, 0.0, 1.0};
+    glLightfv(GL_LIGHT0, GL_POSITION, pos0);
 
-    // desenhar cena
+    static float zLuz = -20.0;
+    zLuz += 0.3;
+    if (zLuz > 28) zLuz = -22;
+    GLfloat pos1[] = {14.5, 3.8, zLuz, 1.0};
+    glLightfv(GL_LIGHT1, GL_POSITION, pos1);
+
+    GLfloat pos2[] = {0.0, 5.2, -8.0, 1.0};
+    GLfloat dir2[] = {0.0, -0.35, -0.94};
+    glLightfv(GL_LIGHT2, GL_POSITION, pos2);
+    glLightfv(GL_LIGHT2, GL_SPOT_DIRECTION, dir2);
+
+    // cena
     desenharChaoComTextura();
     desenharTeto();
     desenharParedesComTextura();
@@ -33,7 +42,6 @@ void display()
     desenharEscadaria();
     desenharPorta();
     desenharTela();
-    desenharFeixeLuz();
     desenharPlateia();
     desenharLuzes();
     desenharCaixasSom();
@@ -45,7 +53,7 @@ void init()
 {
     glEnable(GL_NORMALIZE);
     glEnable(GL_DEPTH_TEST);
-    glClearColor(0.0, 0.0, 0.0, 1.0);
+    glClearColor(0.05, 0.05, 0.1, 1.0);
     carregarTexturas();
 
     glMatrixMode(GL_PROJECTION);
@@ -53,51 +61,60 @@ void init()
     gluPerspective(55, 1.0, 0.8, 60.0);
     glMatrixMode(GL_MODELVIEW);
 
-    // iluminação
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
+    glEnable(GL_LIGHT1);
+    glEnable(GL_LIGHT2);
     glEnable(GL_COLOR_MATERIAL);
-
+    
     glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
 
-    // luz (AJUSTADA)
-    GLfloat luz_amb[] = {0.1, 0.1, 0.1, 1.0};   // mais forte
-    GLfloat luz_dif[] = {1.2, 1.2, 1.2, 1.0};   // branco total
-    GLfloat luz_esp[] = {1.0, 1.0, 1.0, 1.0};
+    GLfloat luz0_amb[] = {0.25, 0.22, 0.22, 1.0};
+    GLfloat luz0_dif[] = {0.85, 0.80, 0.85, 1.0};  
+    GLfloat luz0_esp[] = {0.55, 0.55, 0.55, 1.0};
 
-    glLightfv(GL_LIGHT0, GL_AMBIENT, luz_amb);
-    glLightfv(GL_LIGHT0, GL_DIFFUSE, luz_dif);
-    glLightfv(GL_LIGHT0, GL_SPECULAR, luz_esp);
+    glLightfv(GL_LIGHT0, GL_AMBIENT, luz0_amb);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, luz0_dif);
+    glLightfv(GL_LIGHT0, GL_SPECULAR, luz0_esp);
+    glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, 0.03);
+    glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, 0.005);
 
-    // atenuação (REDUZIDA - antes estava forte demais)
-    glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, 1.0);
-    glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, 0.01);
-    glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, 0.001);
+    GLfloat luz1_amb[] = {0.05, 0.03, 0.01, 1.0};
+    GLfloat luz1_dif[] = {1.2, 0.95, 0.55, 1.0};  
+    GLfloat luz1_esp[] = {0.8, 0.7, 0.5, 1.0};
 
-    // luz ambiente global (AUMENTADA)
-    GLfloat luz_global[] = {0.1, 0.1, 0.1, 1.0};
+    glLightfv(GL_LIGHT1, GL_AMBIENT, luz1_amb);
+    glLightfv(GL_LIGHT1, GL_DIFFUSE, luz1_dif);
+    glLightfv(GL_LIGHT1, GL_SPECULAR, luz1_esp);
+    glLightf(GL_LIGHT1, GL_LINEAR_ATTENUATION, 0.08);
+    glLightf(GL_LIGHT1, GL_QUADRATIC_ATTENUATION, 0.02);
+
+    GLfloat luz2_amb[] = {0.0, 0.0, 0.0, 1.0};
+    GLfloat luz2_dif[] = {1.3, 1.2, 1.0, 1.0};  
+    GLfloat luz2_esp[] = {1.0, 0.95, 0.85, 1.0};
+
+    glLightfv(GL_LIGHT2, GL_AMBIENT, luz2_amb);
+    glLightfv(GL_LIGHT2, GL_DIFFUSE, luz2_dif);
+    glLightfv(GL_LIGHT2, GL_SPECULAR, luz2_esp);
+    glLightf(GL_LIGHT2, GL_LINEAR_ATTENUATION, 0.05);
+    glLightf(GL_LIGHT2, GL_QUADRATIC_ATTENUATION, 0.01);
+    
+    glLightf(GL_LIGHT2, GL_SPOT_CUTOFF, 35.0);
+    glLightf(GL_LIGHT2, GL_SPOT_EXPONENT, 12.0);
+
+    GLfloat luz_global[] = {0.18, 0.16, 0.20, 1.0};  
     glLightModelfv(GL_LIGHT_MODEL_AMBIENT, luz_global);
 
-    // material
-    GLfloat mat_spec[] = {1.0, 1.0, 1.0, 1.0};
-    GLfloat brilho[] = {100.0};
-
+    GLfloat mat_spec[] = {0.85, 0.80, 0.75, 1.0};
+    GLfloat brilho[] = {60.0};
     glMaterialfv(GL_FRONT, GL_SPECULAR, mat_spec);
     glMaterialfv(GL_FRONT, GL_SHININESS, brilho);
-
-    // ===== SPOTLIGHT (cone de luz) =====
-    GLfloat spot_dir[] = {0.0, -0.2, 1.0}; // aponta da tela para a plateia
-
-    glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, spot_dir);
-    glLightf(GL_LIGHT0, GL_SPOT_CUTOFF, 40.0);   // abertura do cone
-    glLightf(GL_LIGHT0, GL_SPOT_EXPONENT, 15.0); // concentração da luz
 }
 
 int main(int argc, char **argv)
 {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-
     glutInitWindowSize(1024, 768);
     glutCreateWindow("Cinema 3D - MC.AV");
 
@@ -108,10 +125,7 @@ int main(int argc, char **argv)
     glutMotionFunc(controlarCameraMotion);
     glutKeyboardFunc(controlarCameraTeclado);
     glutSpecialFunc(controlarCameraEspecial);
+    
     glutMainLoop();
     return 0;
 }
-
-// compilar
-//  gcc -o cinema.exe main.c camera.c obj.c image.c textura.c-lfreeglut -lopengl32 -lglu32 -lm -Wall
-//./cinema.exe
