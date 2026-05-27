@@ -3,23 +3,45 @@
 
 #include <GL/glut.h>
 #include <stdio.h>
+#include <math.h>
 #include "camera.h"
 #include "obj.h"
 #include "textura.h"
+#include "animacao.h"
+#include "tempo.h"
 
 void display()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
 
-    gluLookAt(0, 5, distancia,
-              0, 3.5, 0,
-              0, 1, 0);
+    if (animacao_esta_ativa()) 
+    {
+       gluLookAt(camera_get_camX(), camera_get_camY(), camera_get_camZ(),
+                  camera_get_lookX(), camera_get_lookY(), camera_get_lookZ(),
+                  0, 1, 0);
+    } 
+    else 
+    {
+        float radX = anguloX * 3.14159f / 180.0f;
+        float radY = anguloY * 3.14159f / 180.0f;
+        float cx = 3.5f + distancia * cos(radX) * sin(radY);
+        float cy = 1.35f + distancia * sin(radX);
+        float cz = -3.0f + distancia * cos(radX) * cos(radY);
+        gluLookAt(cx, cy, cz, 0.0, 1.5, -23.0, 0, 1, 0);
+    }
+    
+    float intensidade = animacao_get_intensidade_luz();
+    GLfloat luz0_amb[] = {0.25f * intensidade, 0.22f * intensidade, 0.22f * intensidade, 1.0f};
+    GLfloat luz0_dif[] = {0.85f * intensidade, 0.80f * intensidade, 0.85f * intensidade, 1.0f};  
+    GLfloat luz0_esp[] = {0.55f * intensidade, 0.55f * intensidade, 0.55f * intensidade, 1.0f};
 
-    glRotatef(anguloX, 1, 0, 0);
-    glRotatef(anguloY, 0, 1, 0);
+    glLightfv(GL_LIGHT0, GL_AMBIENT, luz0_amb);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, luz0_dif);
+    glLightfv(GL_LIGHT0, GL_SPECULAR, luz0_esp);
 
-    // posições das luzes
+    GLfloat luz_global[] = {0.18f * intensidade, 0.16f * intensidade, 0.20f * intensidade, 1.0f};  
+    glLightModelfv(GL_LIGHT_MODEL_AMBIENT, luz_global);
     GLfloat pos0[] = {0.0, 8.2, 0.0, 1.0};
     glLightfv(GL_LIGHT0, GL_POSITION, pos0);
 
@@ -34,7 +56,7 @@ void display()
     glLightfv(GL_LIGHT2, GL_POSITION, pos2);
     glLightfv(GL_LIGHT2, GL_SPOT_DIRECTION, dir2);
 
-    // cena
+    //cena
     desenharChaoComTextura();
     desenharTeto();
     desenharParedesComTextura();
@@ -46,6 +68,34 @@ void display()
     desenharLuzes();
     desenharCaixasSom();
 
+    //texto final
+    if(animacao_get_texto_visivel())
+    {
+        glDisable(GL_LIGHTING);
+        glMatrixMode(GL_PROJECTION);
+        glPushMatrix();
+        glLoadIdentity();
+        gluOrtho2D(0, 1024, 0, 768);
+        glMatrixMode(GL_MODELVIEW);
+        glPushMatrix();
+        glLoadIdentity();
+        
+        glColor3f(1.0, 0.9, 0.5);
+        glRasterPos2i(320, 400);
+        char *texto = "Studio Maria Ana Apresenta";
+        char *c;
+        for(c = texto; *c != '\0'; c++)
+        {
+            glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *c);
+        }
+        
+        glPopMatrix();
+        glMatrixMode(GL_PROJECTION);
+        glPopMatrix();
+        glMatrixMode(GL_MODELVIEW);
+        glEnable(GL_LIGHTING);
+    }
+
     glutSwapBuffers();
 }
 
@@ -54,8 +104,7 @@ void init()
     glEnable(GL_NORMALIZE);
     glEnable(GL_DEPTH_TEST);
     glClearColor(0.05, 0.05, 0.1, 1.0);
-    carregarTexturas();
-
+    carregarTexturas(); 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     gluPerspective(55, 1.0, 0.8, 60.0);
@@ -109,6 +158,14 @@ void init()
     GLfloat brilho[] = {60.0};
     glMaterialfv(GL_FRONT, GL_SPECULAR, mat_spec);
     glMaterialfv(GL_FRONT, GL_SHININESS, brilho);
+    
+    animacao_iniciar();
+}
+
+void idle(void)
+{
+    animacao_atualizar();
+    glutPostRedisplay();
 }
 
 int main(int argc, char **argv)
@@ -116,11 +173,12 @@ int main(int argc, char **argv)
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     glutInitWindowSize(1024, 768);
-    glutCreateWindow("Cinema 3D - MC.AV");
+    glutCreateWindow("Cinema 3D - Animacao");
 
     init();
 
     glutDisplayFunc(display);
+    glutIdleFunc(idle);
     glutMouseFunc(controlarCameraMouse);
     glutMotionFunc(controlarCameraMotion);
     glutKeyboardFunc(controlarCameraTeclado);
@@ -129,3 +187,6 @@ int main(int argc, char **argv)
     glutMainLoop();
     return 0;
 }
+
+//compilar
+//gcc -o cinema.exe main.c camera.c obj.c textura.c image.c animacao.c tempo.c -lfreeglut -lglu32 -lopengl32

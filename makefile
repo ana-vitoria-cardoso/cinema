@@ -1,9 +1,9 @@
 CC = gcc
 CFLAGS = -Wall
-LIBS = -lfreeglut -lopengl32 -lglu32 -lm
+LIBS = -lfreeglut -lglu32 -lopengl32 -lm
 
-# Arquivos fonte
-SRCS = main.c camera.c obj.c textura.c image.c
+# Arquivos fonte atualizados com animacao.c e tempo.c
+SRCS = main.c camera.c obj.c textura.c image.c animacao.c tempo.c
 OBJS = $(SRCS:.c=.o)
 TARGET = cinema.exe
 
@@ -21,6 +21,6 @@ clean:
 run: $(TARGET)
 	$(TARGET)
 
-
+# Regra complementar ajustada com todos os arquivos fontes necessários
 compilar:
-	gcc -o cinema.exe main.c camera.c obj.c textura.c image.c -lfreeglut -lopengl32 -lglu32 -lm -Wall
+	gcc -o cinema.exe main.c camera.c obj.c textura.c image.c animacao.c tempo.c -lfreeglut -lglu32 -lopengl32 -lm -Wall

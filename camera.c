@@ -6,6 +6,9 @@
 #include <GL/glut.h>
 #include <stdio.h>
 
+static float camX = 0.0, camY = 5.0, camZ = 22.0;
+static float lookX = 0.0, lookY = 3.5, lookZ = 0.0;
+
 //camera
 float anguloY = 0.0;
 float anguloX = 0.0;
@@ -60,7 +63,7 @@ void controlarCameraMouse(int button, int state, int x, int y) {
     if (button == 3) { //scroll up
         distancia -= 1.2;
     }
-    if (button == 4) {//ccroll down
+    if (button == 4) {//scroll down
         distancia += 1.2;
     }
     
@@ -77,4 +80,55 @@ void controlarCameraMotion(int x, int y) {
         
         glutPostRedisplay();
     }
+}
+
+void camera_set_posicao(float x, float y, float z)
+{
+    camX = x;
+    camY = y;
+    camZ = z;
+}
+
+void camera_set_alvo(float x, float y, float z)
+{
+    lookX = x;
+    lookY = y;
+    lookZ = z;
+}
+
+void camera_get_posicao(float *x, float *y, float *z)
+{
+    *x = camX;
+    *y = camY;
+    *z = camZ;
+}
+
+float camera_get_camX(void)
+{
+    return camX;
+}
+
+float camera_get_camY(void)
+{
+    return camY;
+}
+
+float camera_get_camZ(void)
+{
+    return camZ;
+}
+
+float camera_get_lookX(void)
+{
+    return lookX;
+}
+
+float camera_get_lookY(void)
+{
+    return lookY;
+}
+
+float camera_get_lookZ(void)
+{
+    return lookZ;
 }

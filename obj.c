@@ -4,12 +4,12 @@
 #include "obj.h"
 #include <GL/glut.h>
 #include <math.h>
+#include "animacao.h"
 
-void desenharCadeiraVIP()
-{
+void desenharCadeiraVIP(int ehAlvo)
+{//estatica
     glPushMatrix();
 
-    // base
     glColor3f(0.85, 0.72, 0.35);
     glPushMatrix();
     glTranslatef(0, 0.08, 0);
@@ -18,7 +18,7 @@ void desenharCadeiraVIP()
     glutSolidCube(1.0);
     glPopMatrix();
 
-    // assento
+    //assento
     glColor3f(0.45, 0.25, 0.18);
     glPushMatrix();
     glTranslatef(0, 0.35, 0.1);
@@ -27,7 +27,7 @@ void desenharCadeiraVIP()
     glutSolidCube(1.0);
     glPopMatrix();
 
-    // assento acabamento
+    //assento acabamento
     glColor3f(0.55, 0.18, 0.22);
     glPushMatrix();
     glTranslatef(0, 0.5, 0.1);
@@ -36,39 +36,7 @@ void desenharCadeiraVIP()
     glutSolidCube(1.0);
     glPopMatrix();
 
-    // encosto
-    glColor3f(0.45, 0.25, 0.18);
-    glPushMatrix();
-    glTranslatef(0, 0.9, 0.6);
-    glRotatef(18, 1, 0, 0);
-    glScalef(1.7, 1.3, 0.28);
-
-    // Normal para face inclinada
-    glNormal3f(0, 0.95, 0.31);
-    glutSolidCube(1.0);
-    glPopMatrix();
-
-    // encosto
-    glColor3f(0.55, 0.18, 0.22);
-    glPushMatrix();
-    glTranslatef(0, 0.9, 0.58);
-    glRotatef(18, 1, 0, 0);
-    glScalef(1.65, 1.25, 0.1);
-    glNormal3f(0, 0.95, 0.31);
-    glutSolidCube(1.0);
-    glPopMatrix();
-
-    // apoio cabeca
-    glColor3f(0.45, 0.25, 0.18);
-    glPushMatrix();
-    glTranslatef(0, 1.45, 0.75);
-    glRotatef(10, 1, 0, 0);
-    glScalef(1.2, 0.35, 0.2);
-    glNormal3f(0, 0.98, 0.17);
-    glutSolidCube(1.0);
-    glPopMatrix();
-
-    // apoio braço esquerdo
+    //apoio braço esquerdo
     glColor3f(0.35, 0.18, 0.08);
     glPushMatrix();
     glTranslatef(-0.95, 0.55, 0.05);
@@ -77,7 +45,7 @@ void desenharCadeiraVIP()
     glutSolidCube(1.0);
     glPopMatrix();
 
-    // apoio braço esquerdo
+    //apoio braço esquerdo acabamento
     glColor3f(0.55, 0.18, 0.22);
     glPushMatrix();
     glTranslatef(-0.95, 0.75, 0.05);
@@ -86,7 +54,7 @@ void desenharCadeiraVIP()
     glutSolidCube(1.0);
     glPopMatrix();
 
-    // apoio braço direito (base)
+    //apoio braço direito (base)
     glColor3f(0.35, 0.18, 0.08);
     glPushMatrix();
     glTranslatef(0.95, 0.55, 0.05);
@@ -95,7 +63,7 @@ void desenharCadeiraVIP()
     glutSolidCube(1.0);
     glPopMatrix();
 
-    // apoio braço direito (acabamento)
+    //apoio braço direito (acabamento)
     glColor3f(0.55, 0.18, 0.22);
     glPushMatrix();
     glTranslatef(0.95, 0.75, 0.05);
@@ -103,11 +71,52 @@ void desenharCadeiraVIP()
     glNormal3f(1, 0, 0);
     glutSolidCube(1.0);
     glPopMatrix();
+
+    glPushMatrix();//movel
+    glTranslatef(0.0, 0.5, 0.45);
+        float inclinacaoDinamica = 0.0;
+        if (ehAlvo) 
+        {
+            inclinacaoDinamica = animacao_get_inclinacao_cadeira();
+        }
+        glRotatef(18.0 + inclinacaoDinamica, 1, 0, 0);
+        glTranslatef(0.0, -0.5, -0.45);
+
+        //encosto
+        glColor3f(0.45, 0.25, 0.18);
+        glPushMatrix();
+        glTranslatef(0, 0.9, 0.6);
+        glScalef(1.7, 1.3, 0.28);
+        glNormal3f(0, 0.95, 0.31);
+        glutSolidCube(1.0);
+        glPopMatrix();
+
+        //encosto acabamento
+        glColor3f(0.55, 0.18, 0.22);
+        glPushMatrix();
+        glTranslatef(0, 0.9, 0.58);
+        glScalef(1.65, 1.25, 0.1);
+        glNormal3f(0, 0.95, 0.31);
+        glutSolidCube(1.0);
+        glPopMatrix();
+
+        //apoio cabeca
+        glColor3f(0.45, 0.25, 0.18);
+        glPushMatrix();
+        glTranslatef(0, 1.45, 0.75);
+        glRotatef(10, 1, 0, 0);
+        glScalef(1.2, 0.35, 0.2);
+        glNormal3f(0, 0.98, 0.17);
+        glutSolidCube(1.0);
+        glPopMatrix();
+
+    glPopMatrix(); //movel
+    glPopMatrix(); //ccadeira
 }
 
 void desenharDegrau(float zPos, float yPos, float largura)
 {
-    // base do degrau
+    //base do degrau
     glColor3f(0.22, 0.22, 0.28);
     glPushMatrix();
     glTranslatef(0, yPos - 0.1, zPos);
@@ -116,7 +125,7 @@ void desenharDegrau(float zPos, float yPos, float largura)
     glutSolidCube(1);
     glPopMatrix();
 
-    // piso do degrau
+    //piso do degrau
     glColor3f(0.5, 0.08, 0.15);
     glPushMatrix();
     glTranslatef(0, yPos + 0.05, zPos);
@@ -125,7 +134,7 @@ void desenharDegrau(float zPos, float yPos, float largura)
     glutSolidCube(1);
     glPopMatrix();
 
-    // borda dourada
+    //borda dourada
     glColor3f(0.85, 0.72, 0.35);
     glPushMatrix();
     glTranslatef(0, yPos + 0.18, zPos + 1.55);
@@ -154,37 +163,42 @@ void desenharPlateia()
         glTranslatef(11.5, 0, 0);
         desenharDegrau(zPos, yPos, larguraEsquerda);
         glPopMatrix();
-
-        for (float x = -7.5; x <= -2.5; x += 2.2)
+        for (float x = -7.5; x <= -2.5; x += 2.2)//esq
         {
             glPushMatrix();
             glTranslatef(x, yPos + 0.25, zPos);
-            desenharCadeiraVIP();
+            desenharCadeiraVIP(0);
             glPopMatrix();
         }
-
-        for (float x = 3.5; x <= 8.5; x += 2.2)
+        for (float x = 3.5; x <= 8.5; x += 2.2)//dir
         {
             glPushMatrix();
             glTranslatef(x, yPos + 0.25, zPos);
-            desenharCadeiraVIP();
+            if (i == 0 && fabs(x - 3.5) < 0.1) 
+            {
+                desenharCadeiraVIP(1); 
+            }
+            else 
+            {
+                desenharCadeiraVIP(0); 
+            }
+            
             glPopMatrix();
         }
-
         if (i >= 5)
         {
             for (float x = -10; x <= -8; x += 2.0)
             {
                 glPushMatrix();
                 glTranslatef(x, yPos + 0.25, zPos);
-                desenharCadeiraVIP();
+                desenharCadeiraVIP(0);
                 glPopMatrix();
             }
             for (float x = 9; x <= 11; x += 2.0)
             {
                 glPushMatrix();
                 glTranslatef(x, yPos + 0.25, zPos);
-                desenharCadeiraVIP();
+                desenharCadeiraVIP(0);
                 glPopMatrix();
             }
         }
@@ -341,21 +355,20 @@ void desenharTela()
     glutSolidCube(1);
     glPopMatrix();
 
-    GLfloat emissive[] = {0.2, 0.2, 0.2, 1.0}; // leve brilho
-    glMaterialfv(GL_FRONT, GL_EMISSION, emissive);
 
-    glColor3f(0.95, 0.95, 0.95);
+   float escurecimento = animacao_get_escurecimento();
+    float corTela = 0.95 * (1.0 - escurecimento);
+    GLfloat emissive[] = {0.2f * (1.0f - escurecimento), 0.2f * (1.0f - escurecimento), 0.2f * (1.0f - escurecimento), 1.0f}; 
+    glMaterialfv(GL_FRONT, GL_EMISSION, emissive);
+    glColor3f(corTela, corTela, corTela); //cor mudando
     glPushMatrix();
     glTranslatef(0, 5.0, -23.3);
     glScalef(11.5, 7.5, 0.05);
-    glutSolidCube(1);
+    glutSolidCube(1.0);
     glPopMatrix();
-
-    // desliga emissão
     GLfloat no_emissive[] = {0.0, 0.0, 0.0, 1.0};
     glMaterialfv(GL_FRONT, GL_EMISSION, no_emissive);
 
-    // laterais
     glColor3f(0.65, 0.12, 0.15);
     glPushMatrix();
     glTranslatef(-6.5, 5.0, -23);
@@ -369,7 +382,6 @@ void desenharTela()
     glutSolidCube(1);
     glPopMatrix();
 
-    // topo
     glPushMatrix();
     glTranslatef(0, 8.8, -23);
     glScalef(13, 0.8, 0.5);
@@ -385,39 +397,37 @@ void desenharLuzes()
 
         glColor3f(0.6, 0.5, 0.3);
 
-        // esquerda
+        //esq
         glPushMatrix();
         glTranslatef(-15.5, 4.5, z);
         glScalef(0.2, 0.8, 0.2);
         glutSolidCube(1);
         glPopMatrix();
 
-        // direita
+        //dir
         glPushMatrix();
         glTranslatef(15.5, 4.5, z);
         glScalef(0.2, 0.8, 0.2);
         glutSolidCube(1);
         glPopMatrix();
 
-        // lampadas
+        //lampadas
         GLfloat emissive[] = {1.5, 1.1, 0.5, 1.0};
         glMaterialfv(GL_FRONT, GL_EMISSION, emissive);
 
         glColor3f(1.0, 0.75, 0.3);
 
-        // esquerda
+        //esq
         glPushMatrix();
         glTranslatef(-15.5, 4.2, z);
         glutSolidSphere(0.18, 16, 16);
         glPopMatrix();
 
-        // direita
+        //dir
         glPushMatrix();
         glTranslatef(15.5, 4.2, z);
         glutSolidSphere(0.18, 16, 16);
         glPopMatrix();
-
-        // desliga emissão
         GLfloat no_emissive[] = {0.0, 0.0, 0.0, 1.0};
         glMaterialfv(GL_FRONT, GL_EMISSION, no_emissive);
     }
@@ -467,32 +477,37 @@ void desenharEscadaria()
         altura += 0.18;
     }
 }
-
 void desenharPorta()
 {
-    glColor3f(0.35, 0.18, 0.08);
-    glPushMatrix();
-    glTranslatef(11, 1.8, 26);
-    glScalef(2.2, 4.0, 0.1);
-    glutSolidCube(1);
+    float anguloPorta = animacao_get_abertura_porta();
+    glPushMatrix();//movel
+        glTranslatef(-12.1, 1.8, 26.0);
+        glRotatef(-anguloPorta, 0, 1, 0);
+        glTranslatef(12.1, -1.8, -26.0);
+        glColor3f(0.35, 0.18, 0.08);
+        glPushMatrix();
+        glTranslatef(-11.0, 1.8, 26.0);
+        glScalef(2.2, 4.0, 0.1);
+        glutSolidCube(1);
+        glPopMatrix();
+        //maçaneta
+        glColor3f(0.85, 0.72, 0.35);
+        glPushMatrix();
+        glTranslatef(-11.8, 2.0, 26.05);
+        glutSolidSphere(0.1, 12, 12);
+        glPopMatrix();
+        glColor3f(0.8, 0.6, 0.1);
+        glPushMatrix();
+        glTranslatef(-11.0, 3.2, 26.05);
+        glScalef(1.2, 0.3, 0.05);
+        glutSolidCube(1);
+        glPopMatrix();
+
     glPopMatrix();
 
-    glColor3f(0.85, 0.72, 0.35);
+    glColor3f(0.08, 0.06, 0.12);//estatica moldura
     glPushMatrix();
-    glTranslatef(10.2, 2.0, 26.05);
-    glutSolidSphere(0.1, 12, 12);
-    glPopMatrix();
-
-    glColor3f(0.8, 0.6, 0.1);
-    glPushMatrix();
-    glTranslatef(11, 3.2, 26.05);
-    glScalef(1.2, 0.3, 0.05);
-    glutSolidCube(1);
-    glPopMatrix();
-
-    glColor3f(0.08, 0.06, 0.12);
-    glPushMatrix();
-    glTranslatef(13.5, 2.5, 26);
+    glTranslatef(-13.5, 2.5, 26.0);
     glScalef(0.2, 5.0, 0.5);
     glutSolidCube(1);
     glPopMatrix();
@@ -532,7 +547,7 @@ void desenharParedes()
 {
     glColor3f(0.08, 0.06, 0.12);
 
-    // parede frontal (tela)
+    //parede tela)
     glPushMatrix();
     glTranslatef(0, 4.5, -24);
     glScalef(32, 9.0, 0.2);
@@ -540,7 +555,7 @@ void desenharParedes()
     glutSolidCube(1);
     glPopMatrix();
 
-    // parede esquerda
+    //parede esq
     glPushMatrix();
     glTranslatef(-16, 4.5, 0);
     glScalef(0.2, 9.0, 55);
@@ -548,7 +563,7 @@ void desenharParedes()
     glutSolidCube(1);
     glPopMatrix();
 
-    // parede direita
+    //parede dir
     glPushMatrix();
     glTranslatef(16, 4.5, 0);
     glScalef(0.2, 9.0, 55);
@@ -556,7 +571,7 @@ void desenharParedes()
     glutSolidCube(1);
     glPopMatrix();
 
-    // parede traseira
+    //parede traseira
     glPushMatrix();
     glTranslatef(0, 4.5, 28);
     glScalef(32, 9.0, 0.2);

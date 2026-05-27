@@ -4,7 +4,7 @@
 #ifndef OBJETOS_H
 #define OBJETOS_H
 
-void desenharCadeiraVIP();
+void desenharCadeiraVIP(int ehAlvo);
 void desenharDegrau(float zPos, float yPos, float largura);
 void desenharPlateia();
 void desenharChao();           
