@@ -124,14 +124,18 @@ static void desenharTextoTela(const char *linha1, const char *linha2, float alph
     void *fonte = GLUT_BITMAP_TIMES_ROMAN_24;
 
     float w1 = larguraTexto(linha1, fonte);
+    float w2 = (linha2 && linha2[0] != '\0') ? larguraTexto(linha2, fonte) : 0.0f;
+    // centraliza pelo bloco inteiro usando a linha mais larga
+    float wMax = (w1 > w2) ? w1 : w2;
+    float baseX = cx - wMax * 0.5f;
+
     glColor4f(r, g, b, alpha);
-    renderizarTexto(linha1, fonte, cx - w1*0.5f, cy + 18.0f);
+    renderizarTexto(linha1, fonte, baseX + (wMax - w1) * 0.5f, cy + 18.0f);
 
     if (linha2 && linha2[0] != '\0')
     {
-        float w2 = larguraTexto(linha2, fonte);
         glColor4f(r, g, b, alpha * 0.9f);
-        renderizarTexto(linha2, fonte, cx - w2*0.5f, cy - 14.0f);
+        renderizarTexto(linha2, fonte, baseX + (wMax - w2) * 0.5f, cy - 14.0f);
     }
 
     glDisable(GL_BLEND);
