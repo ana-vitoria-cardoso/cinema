@@ -19,6 +19,7 @@ typedef enum {
     ANIM_CREDITOS,          // "Projeto final de computacao grafica..."
     ANIM_TITULO_FORMAS,     // "Formas Geometricas"
     ANIM_FORMAS,            // animacao de formas na tela
+    ANIM_FIM_TEXTO,         // "Fim! Obrigada!"
     ANIM_FIM
 } EstadoAnimacao;
 
@@ -39,5 +40,6 @@ int animacao_get_titulo_formas_visivel(void);
 int animacao_get_formas_visivel(void);
 float animacao_get_tempo_formas(void);
 float animacao_get_alpha_tela(void);  // fade in/out dos textos
+int animacao_get_fim_visivel(void);
 
 #endif

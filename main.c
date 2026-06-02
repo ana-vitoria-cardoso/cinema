@@ -104,7 +104,7 @@ static void desenharTextoTela(const char *linha1, const char *linha2, float alph
     // altura pelo aspect ratio da tela 3D, reduzida 8% para compensar perspectiva
     float halfW = (tx2 - tx1) * 0.5f;
     float halfH = halfW / (11.5f / 7.5f) * 0.94f;
-    float tcx = (float)pCx;
+    float tcx = ((float)pBL_x + (float)pBR_x + (float)pTL_x + (float)pTR_x) * 0.25f;
     float tcy = (float)pCy;
     // centro Y real = média dos 4 cantos projetados, com leve ajuste para baixo
     float tcy_real = ((float)pTL_y + (float)pTR_y + (float)pBL_y + (float)pBR_y) * 0.25f;
@@ -121,21 +121,18 @@ static void desenharTextoTela(const char *linha1, const char *linha2, float alph
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    void *fonte = GLUT_BITMAP_TIMES_ROMAN_24;
+    void *fonte = GLUT_BITMAP_HELVETICA_18;
 
+    // centraliza cada linha individualmente pelo centro da tela
     float w1 = larguraTexto(linha1, fonte);
-    float w2 = (linha2 && linha2[0] != '\0') ? larguraTexto(linha2, fonte) : 0.0f;
-    // centraliza pelo bloco inteiro usando a linha mais larga
-    float wMax = (w1 > w2) ? w1 : w2;
-    float baseX = cx - wMax * 0.5f;
-
     glColor4f(r, g, b, alpha);
-    renderizarTexto(linha1, fonte, baseX + (wMax - w1) * 0.5f, cy + 18.0f);
+    renderizarTexto(linha1, fonte, cx - w1 * 0.5f, cy + 18.0f);
 
     if (linha2 && linha2[0] != '\0')
     {
+        float w2 = larguraTexto(linha2, fonte);
         glColor4f(r, g, b, alpha * 0.9f);
-        renderizarTexto(linha2, fonte, baseX + (wMax - w2) * 0.5f, cy - 14.0f);
+        renderizarTexto(linha2, fonte, cx - w2 * 0.5f, cy - 14.0f);
     }
 
     glDisable(GL_BLEND);
@@ -312,7 +309,7 @@ static void desenharFormasAnimadas(float t)
     // altura pelo aspect ratio da tela 3D, reduzida 8% para compensar perspectiva
     float halfW = (tx2 - tx1) * 0.5f;
     float halfH = halfW / (11.5f / 7.5f) * 0.94f;
-    float tcx = (float)pCx;
+    float tcx = ((float)pBL_x + (float)pBR_x + (float)pTL_x + (float)pTR_x) * 0.25f;
     float tcy = (float)pCy;
     // centro Y real = média dos 4 cantos projetados, com leve ajuste para baixo
     float tcy_real = ((float)pTL_y + (float)pTR_y + (float)pBL_y + (float)pBR_y) * 0.25f;
@@ -562,6 +559,13 @@ void display()
     if (animacao_get_formas_visivel())
     {
         desenharFormasAnimadas(animacao_get_tempo_formas());
+    }
+
+    // "Fim! Obrigada!"
+    if (animacao_get_fim_visivel())
+    {
+        desenharTextoTela("Fim!", "Obrigada!",
+                          animacao_get_alpha_tela(), 1.0f, 0.9f, 0.5f);
     }
 
     glutSwapBuffers();

@@ -299,6 +299,17 @@ void animacao_atualizar(void)
     {
         if (tempo_estado >= 12.0)
         {
+            estado = ANIM_FIM_TEXTO;
+            tempo_estado = 0.0;
+        }
+        break;
+    }
+
+    // "Fim! Obrigada!" — dura 5s
+    case ANIM_FIM_TEXTO:
+    {
+        if (tempo_estado >= 5.0)
+        {
             estado = ANIM_FIM;
             tempo_estado = 0.0;
         }
@@ -373,6 +384,12 @@ float animacao_get_alpha_tela(void)
         if (tempo_estado < 2.2f) return 1.0f;
         return 1.0f - (tempo_estado - 2.2f) / FADE;
     }
+    if (estado == ANIM_FIM_TEXTO)
+    {
+        if (tempo_estado < FADE) return tempo_estado / FADE;
+        if (tempo_estado < 4.0f) return 1.0f;
+        return 1.0f - (tempo_estado - 4.0f) / FADE;
+    }
     return 1.0f;
 }
 
@@ -422,4 +439,9 @@ float animacao_get_abertura_porta(void)
     if (estado > ANIM_ABRINDO_PORTA)
         return 90.0;
     return 0.0;
+}
+
+int animacao_get_fim_visivel(void)
+{
+    return (estado == ANIM_FIM_TEXTO);
 }
