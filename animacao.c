@@ -297,7 +297,7 @@ void animacao_atualizar(void)
     // animacao de formas geometricas — roda ate ANIM_FIM
     case ANIM_FORMAS:
     {
-        if (tempo_estado >= 12.0)
+        if (tempo_estado >= 10.0)
         {
             estado = ANIM_FIM_TEXTO;
             tempo_estado = 0.0;

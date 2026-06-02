@@ -284,10 +284,19 @@ static void calcVertices(int forma, float escala, float angExtra, float *vx, flo
 }
 
 // sequência de formas e cores ao longo de 12 segundos
+// sequência de formas e cores ao longo de 12 segundos
 static void desenharFormasAnimadas(float t)
 {
     int winW = glutGet(GLUT_WINDOW_WIDTH);
     int winH = glutGet(GLUT_WINDOW_HEIGHT);
+
+    // DURAÇÃO TOTAL DA ANIMAÇÃO DE FORMAS: 4 formas x 2.4s = 9.6s
+    float duracaoTotal = 9.6f;  // 4 formas * 2.4s
+    
+    // Se já passou do tempo total, não desenha nada (evita o triângulo extra)
+    if (t >= duracaoTotal) {
+        return;
+    }
 
     // Projeta os 4 cantos EXATOS da superfície branca (11.5 x 7.5 centrada em 0,5,-23.3)
     // Projeta os 4 cantos da superfície branca individualmente
@@ -340,7 +349,7 @@ static void desenharFormasAnimadas(float t)
         {0.95f, 0.35f, 0.25f}, // triângulo
         {0.25f, 0.75f, 0.95f}, // quadrado
         {0.45f, 0.95f, 0.45f}, // círculo
-        {0.95f, 0.85f, 0.25f}, //estrela
+        {0.95f, 0.85f, 0.25f}, // estrela
     };
 
     // formas: 0=tri, 1=quad, 2=circ, 3=estrela
@@ -351,7 +360,78 @@ static void desenharFormasAnimadas(float t)
 
     float fase_f = t / duracao;
     int fase = (int)fase_f;
-    if (fase > 3) fase = 3;
+    
+    // Garante que não ultrapassa a última forma
+    int maxFase = 3;  // formas 0,1,2,3
+    if (fase >= maxFase) {
+        // Quando chegar na última fase, fixa na última forma
+        fase = maxFase;
+        // Desenha apenas a última forma (estrela) sem transição
+        int forma = seq[maxFase];
+        int cor = maxFase;
+        
+        float vx[N_VERTS], vy[N_VERTS];
+        float escala = (tx2 - tx1) * 0.12f;
+        float rot = t * 18.0f;
+        
+        calcVertices(forma, escala, 0, vx, vy);
+        
+        float cx = tcx, cy = tcy;
+        float PI = 3.14159f;
+        
+        // sombra
+        glColor4f(0.0f, 0.0f, 0.0f, 0.35f);
+        glBegin(GL_TRIANGLE_FAN);
+        glVertex2f(cx + 5, cy - 5);
+        for (int i = 0; i <= N_VERTS; i++)
+        {
+            float ra = rot * PI / 180.0f;
+            float rx = vx[i % N_VERTS] * cos(ra) - vy[i % N_VERTS] * sin(ra);
+            float ry = vx[i % N_VERTS] * sin(ra) + vy[i % N_VERTS] * cos(ra);
+            glVertex2f(cx + 5 + rx, cy - 5 + ry);
+        }
+        glEnd();
+        
+        // forma
+        glColor4f(cores[cor][0], cores[cor][1], cores[cor][2], 1.0f);
+        glBegin(GL_TRIANGLE_FAN);
+        glVertex2f(cx, cy);
+        for (int i = 0; i <= N_VERTS; i++)
+        {
+            float ra = rot * PI / 180.0f;
+            float rx = vx[i % N_VERTS] * cos(ra) - vy[i % N_VERTS] * sin(ra);
+            float ry = vx[i % N_VERTS] * sin(ra) + vy[i % N_VERTS] * cos(ra);
+            glVertex2f(cx + rx, cy + ry);
+        }
+        glEnd();
+        
+        // contorno
+        glLineWidth(2.5f);
+        glColor4f(1.0f, 1.0f, 1.0f, 0.55f);
+        glBegin(GL_LINE_LOOP);
+        for (int i = 0; i < N_VERTS; i++)
+        {
+            float ra = rot * PI / 180.0f;
+            float rx = vx[i] * cos(ra) - vy[i] * sin(ra);
+            float ry = vx[i] * sin(ra) + vy[i] * cos(ra);
+            glVertex2f(cx + rx, cy + ry);
+        }
+        glEnd();
+        
+        // nome
+        const char *nomes[4] = {"Triangulo", "Quadrado", "Circulo", "Estrela"};
+        void *fonte = GLUT_BITMAP_HELVETICA_18;
+        float w = larguraTexto(nomes[maxFase], fonte);
+        float nomeY = ty1 + (ty2 - ty1) * 0.10f;
+        glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+        renderizarTexto(nomes[maxFase], fonte, tcx - w * 0.5f, nomeY);
+        
+        glDisable(GL_BLEND);
+        encerrarOrtho();
+        glDisable(GL_SCISSOR_TEST);
+        return;
+    }
+    
     float local = fase_f - fase; // 0..1 dentro da fase
 
     int formaA = seq[fase % 4];
@@ -432,7 +512,7 @@ static void desenharFormasAnimadas(float t)
     glEnd();
 
     // nome centralizado dentro da tela do cinema (abaixo do centro)
-    const char *nomes[] = {"Triangulo", "Quadrado", "Circulo", "Estrela"};
+    const char *nomes[4] = {"Triangulo", "Quadrado", "Circulo", "Estrela"};
     const char *nomeA = nomes[formaA];
     const char *nomeB = nomes[formaB];
     void *fonte = GLUT_BITMAP_HELVETICA_18;
