@@ -336,29 +336,28 @@ static void desenharFormasAnimadas(float t)
     glEnd();
 
     // paleta de cores por fase
-    float cores[5][3] = {
-        {0.95f, 0.35f, 0.25f}, // vermelho-laranja
-        {0.25f, 0.75f, 0.95f}, // azul-ciano
-        {0.45f, 0.95f, 0.45f}, // verde
-        {0.95f, 0.85f, 0.25f}, // dourado
-        {0.75f, 0.35f, 0.95f}, // roxo
+    float cores[4][3] = {
+        {0.95f, 0.35f, 0.25f}, // triângulo
+        {0.25f, 0.75f, 0.95f}, // quadrado
+        {0.45f, 0.95f, 0.45f}, // círculo
+        {0.95f, 0.85f, 0.25f}, //estrela
     };
 
-    // formas: 0=tri, 1=quad, 2=circ, 3=estrela, 0=tri...
-    int seq[5] = {0, 1, 2, 3, 0};
+    // formas: 0=tri, 1=quad, 2=circ, 3=estrela
+    int seq[4] = {0, 1, 2, 3};
 
     float duracao = 2.4f;  // duração de cada fase
     float transicao = 0.8f; // sobreposição de fade
 
     float fase_f = t / duracao;
     int fase = (int)fase_f;
-    if (fase > 4) fase = 4;
+    if (fase > 3) fase = 3;
     float local = fase_f - fase; // 0..1 dentro da fase
 
-    int formaA = seq[fase % 5];
-    int formaB = seq[(fase + 1) % 5];
-    int corA = fase % 5;
-    int corB = (fase + 1) % 5;
+    int formaA = seq[fase % 4];
+    int formaB = seq[(fase + 1) % 4];
+    int corA = fase % 4;
+    int corB = (fase + 1) % 4;
 
     float vxA[N_VERTS], vyA[N_VERTS];
     float vxB[N_VERTS], vyB[N_VERTS];
@@ -433,7 +432,7 @@ static void desenharFormasAnimadas(float t)
     glEnd();
 
     // nome centralizado dentro da tela do cinema (abaixo do centro)
-    const char *nomes[] = {"Triangulo", "Quadrado", "Circulo", "Estrela", "Triangulo"};
+    const char *nomes[] = {"Triangulo", "Quadrado", "Circulo", "Estrela"};
     const char *nomeA = nomes[formaA];
     const char *nomeB = nomes[formaB];
     void *fonte = GLUT_BITMAP_HELVETICA_18;
