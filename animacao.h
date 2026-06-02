@@ -20,6 +20,7 @@ typedef enum {
     ANIM_TITULO_FORMAS,     // "Formas Geometricas"
     ANIM_FORMAS,            // animacao de formas na tela
     ANIM_FIM_TEXTO,         // "Fim! Obrigada!"
+    ANIM_APAGANDO,          // camera recua, tela apaga
     ANIM_FIM
 } EstadoAnimacao;
 
@@ -41,5 +42,6 @@ int animacao_get_formas_visivel(void);
 float animacao_get_tempo_formas(void);
 float animacao_get_alpha_tela(void);  // fade in/out dos textos
 int animacao_get_fim_visivel(void);
+float animacao_get_alpha_apagando(void);
 
 #endif

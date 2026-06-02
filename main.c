@@ -533,14 +533,12 @@ void display()
     EstadoAnimacao est = animacao_get_estado();
     float alpha = animacao_get_alpha_tela();
 
-    // "Studio Maria Ana Apresenta"
     if (animacao_get_texto_visivel())
     {
-        desenharTextoTela("Studio Maria Ana Apresenta", "",
+        desenharTextoTela("Studio Maria&Ana Apresenta...", "",
                           alpha, 1.0f, 0.9f, 0.5f);
     }
 
-    // "Projeto final de Computacao Grafica..."
     if (animacao_get_creditos_visivel())
     {
         desenharTextoTela("Projeto Final de Computacao Grafica",
@@ -566,6 +564,26 @@ void display()
     {
         desenharTextoTela("Fim!", "Obrigada!",
                           animacao_get_alpha_tela(), 1.0f, 0.9f, 0.5f);
+    }
+
+    // fade para preto no final — cobre a tela inteira
+    float alphaApagando = animacao_get_alpha_apagando();
+    if (alphaApagando > 0.0f)
+    {
+        int winW = glutGet(GLUT_WINDOW_WIDTH);
+        int winH = glutGet(GLUT_WINDOW_HEIGHT);
+        iniciarOrtho();
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glColor4f(0.0f, 0.0f, 0.0f, alphaApagando);
+        glBegin(GL_QUADS);
+            glVertex2f(0,    0);
+            glVertex2f(winW, 0);
+            glVertex2f(winW, winH);
+            glVertex2f(0,    winH);
+        glEnd();
+        glDisable(GL_BLEND);
+        encerrarOrtho();
     }
 
     glutSwapBuffers();

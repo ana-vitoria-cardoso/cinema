@@ -310,6 +310,38 @@ void animacao_atualizar(void)
     {
         if (tempo_estado >= 5.0)
         {
+            estado = ANIM_APAGANDO;
+            tempo_estado = 0.0;
+        }
+        break;
+    }
+
+    // camera vai para frente da tela, tela apaga — dura 3s
+    case ANIM_APAGANDO:
+    {
+        static int primeiraVezApagando = 1;
+        static float oX = 0.0, oY = 0.0, oZ = 0.0;
+
+        if (primeiraVezApagando)
+        {
+            oX = camera_get_camX();
+            oY = camera_get_camY();
+            oZ = camera_get_camZ();
+            primeiraVezApagando = 0;
+        }
+
+        float t = tempo_estado / 3.0;
+        if (t >= 1.0) t = 1.0;
+
+        float x = lerp(oX, 0.0, t);
+        float y = lerp(oY, 5.0, t);
+        float z = lerp(oZ, 0.0, t);
+        camera_set_posicao(x, y, z);
+        camera_set_alvo(0.0, 5.0, -23.0);
+
+        if (t >= 1.0)
+        {
+            primeiraVezApagando = 1;
             estado = ANIM_FIM;
             tempo_estado = 0.0;
         }
@@ -333,6 +365,12 @@ EstadoAnimacao animacao_get_estado(void)
 
 float animacao_get_intensidade_luz(void)
 {
+    if (estado == ANIM_APAGANDO)
+    {
+        float t = tempo_estado / 3.0;
+        if (t > 1.0) t = 1.0;
+        return t * 0.05; // sala continua quase escura
+    }
     if (estado >= ANIM_ESCURECENDO && estado != ANIM_FIM)
     {
         float t = (estado == ANIM_ESCURECENDO) ? tempo_estado / 3.0 : 1.0;
@@ -344,6 +382,8 @@ float animacao_get_intensidade_luz(void)
 
 float animacao_get_escurecimento(void)
 {
+    if (estado == ANIM_APAGANDO)
+        return 0.95; // tela permanece escura enquanto camera se move
     if (estado >= ANIM_ESCURECENDO && estado != ANIM_FIM)
     {
         float t = (estado == ANIM_ESCURECENDO) ? tempo_estado / 3.0 : 1.0;
@@ -444,4 +484,17 @@ float animacao_get_abertura_porta(void)
 int animacao_get_fim_visivel(void)
 {
     return (estado == ANIM_FIM_TEXTO);
+}
+
+float animacao_get_alpha_apagando(void)
+{
+    if (estado == ANIM_APAGANDO)
+    {
+        float t = tempo_estado / 3.0;
+        if (t > 1.0) t = 1.0;
+        return t; // 0.0 = visivel, 1.0 = tela totalmente preta
+    }
+    if (estado == ANIM_FIM)
+        return 1.0;
+    return 0.0;
 }
