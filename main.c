@@ -106,9 +106,9 @@ static void desenharTextoTela(const char *linha1, const char *linha2, float alph
     float halfH = halfW / (11.5f / 7.5f) * 0.94f;
     float tcx = (float)pCx;
     float tcy = (float)pCy;
-    // centro Y real = média dos 4 cantos projetados (corrige inclinação aparente)
+    // centro Y real = média dos 4 cantos projetados, com leve ajuste para baixo
     float tcy_real = ((float)pTL_y + (float)pTR_y + (float)pBL_y + (float)pBR_y) * 0.25f;
-    tcy = tcy_real;
+    tcy = tcy_real - halfH * 0.08f;
     float ty1 = tcy - halfH;
     float ty2 = tcy + halfH;
     float cx = tcx;
@@ -310,9 +310,9 @@ static void desenharFormasAnimadas(float t)
     float halfH = halfW / (11.5f / 7.5f) * 0.94f;
     float tcx = (float)pCx;
     float tcy = (float)pCy;
-    // centro Y real = média dos 4 cantos projetados (corrige inclinação aparente)
+    // centro Y real = média dos 4 cantos projetados, com leve ajuste para baixo
     float tcy_real = ((float)pTL_y + (float)pTR_y + (float)pBL_y + (float)pBR_y) * 0.25f;
-    tcy = tcy_real;
+    tcy = tcy_real - halfH * 0.08f;
     float ty1 = tcy - halfH;
     float ty2 = tcy + halfH;
 
