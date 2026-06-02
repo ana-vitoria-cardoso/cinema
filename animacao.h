@@ -15,7 +15,10 @@ typedef enum {
     ANIM_SENTANDO_CAMERA, 
     ANIM_OLHANDO_TELA,
     ANIM_ESCURECENDO,
-    ANIM_PROJETANDO,
+    ANIM_PROJETANDO,        // "Studio Maria Ana Apresenta"
+    ANIM_CREDITOS,          // "Projeto final de computacao grafica..."
+    ANIM_TITULO_FORMAS,     // "Formas Geometricas"
+    ANIM_FORMAS,            // animacao de formas na tela
     ANIM_FIM
 } EstadoAnimacao;
 
@@ -29,5 +32,12 @@ float animacao_get_escurecimento(void);
 int animacao_get_texto_visivel(void);
 float animacao_get_inclinacao_cadeira(void);
 float animacao_get_abertura_porta(void);
+
+// novos getters para os estados da tela
+int animacao_get_creditos_visivel(void);
+int animacao_get_titulo_formas_visivel(void);
+int animacao_get_formas_visivel(void);
+float animacao_get_tempo_formas(void);
+float animacao_get_alpha_tela(void);  // fade in/out dos textos
 
 #endif

@@ -18,7 +18,7 @@ static float cadeiraX = 3.5, cadeiraZ = -3.0;
 static float cadeiraY = 0.5;
 static float telaZ = -23.0;
 
-//var de caminho
+// var de caminho
 static float etapaX = 0.0;
 static float etapaZ = 0.0;
 
@@ -36,7 +36,7 @@ void animacao_iniciar(void)
     tempo_iniciar();
 
     camera_set_posicao(inicioX, inicioY, inicioZ);
-    camera_set_alvo(inicioX, inicioY,  inicioZ - 5);
+    camera_set_alvo(inicioX, inicioY, inicioZ - 5);
 }
 
 void animacao_atualizar(void)
@@ -49,16 +49,15 @@ void animacao_atualizar(void)
 
     switch (estado)
     {
-     case ANIM_ABRINDO_PORTA: 
+    case ANIM_ABRINDO_PORTA:
     {
         float t = tempo_estado / 2.0;
         if (t >= 1.0) t = 1.0;
         camera_set_posicao(inicioX, inicioY, inicioZ);
-        camera_set_alvo(inicioX, inicioY,  inicioZ - 5);
-
+        camera_set_alvo(inicioX, inicioY, inicioZ - 5);
         if (t >= 1.0)
         {
-            estado = ANIM_INICIO; 
+            estado = ANIM_INICIO;
             tempo_estado = 0.0;
         }
         break;
@@ -76,21 +75,21 @@ void animacao_atualizar(void)
 
     case ANIM_ANDANDO_Z:
     {
-        float t = tempo_estado / 8.0; 
+        float t = tempo_estado / 8.0;
         if (t >= 1.0) t = 1.0;
 
         float z = lerp(inicioZ, -4.5, t);
-        float x = inicioX;                           
-        float y = inicioY + sin(t * 3.14159) * 0.03; 
+        float x = inicioX;
+        float y = inicioY + sin(t * 3.14159) * 0.03;
 
         camera_set_posicao(x, y, z);
-       
+
         float alvoX = inicioX;
         float alvoY = inicioY;
-        float alvoZ = z - 5.0; 
+        float alvoZ = z - 5.0;
         if (t > 0.7)
         {
-            float tGiro = (t - 0.7) / 0.3; 
+            float tGiro = (t - 0.7) / 0.3;
             alvoX = lerp(inicioX, cadeiraX, tGiro);
             alvoY = lerp(inicioY, cadeiraY + 0.3, tGiro);
             alvoZ = lerp(z - 5.0, cadeiraZ, tGiro);
@@ -113,7 +112,7 @@ void animacao_atualizar(void)
             primeiraVezX = 0;
         }
 
-        float t = tempo_estado / 6.0; 
+        float t = tempo_estado / 6.0;
         if (t >= 1.0) t = 1.0;
 
         float x = lerp(etapaX, cadeiraX, t);
@@ -125,7 +124,7 @@ void animacao_atualizar(void)
 
         if (t >= 1.0)
         {
-            primeiraVezX = 1; 
+            primeiraVezX = 1;
             estado = ANIM_OLHANDO_LATERAL;
             tempo_estado = 0.0;
         }
@@ -147,21 +146,21 @@ void animacao_atualizar(void)
         float t = tempo_estado / 2.0;
         if (t >= 1.0) t = 1.0;
         float xFinal = cadeiraX - 2.5;
-        float zFinal = cadeiraZ - 0.14;  
+        float zFinal = cadeiraZ - 0.14;
         float x = lerp(oX, xFinal, t);
         float z = lerp(oZ, zFinal, t);
         camera_set_posicao(x, inicioY, z);
-        camera_set_alvo(cadeiraX, cadeiraY + 0.6, cadeiraZ); 
+        camera_set_alvo(cadeiraX, cadeiraY + 0.6, cadeiraZ);
         if (t >= 1.0)
         {
-            primeiraVezLateral = 1; 
-            estado = ANIM_SENTANDO; 
+            primeiraVezLateral = 1;
+            estado = ANIM_SENTANDO;
             tempo_estado = 0.0;
         }
         break;
     }
 
-    case ANIM_SENTANDO: 
+    case ANIM_SENTANDO:
     {
         float t = tempo_estado / 2.0;
         if (t >= 1.0) t = 1.0;
@@ -171,13 +170,13 @@ void animacao_atualizar(void)
         camera_set_alvo(cadeiraX, cadeiraY + 0.6, cadeiraZ);
         if (t >= 1.0)
         {
-            estado = ANIM_IR_PARA_FRENTE; 
+            estado = ANIM_IR_PARA_FRENTE;
             tempo_estado = 0.0;
         }
         break;
     }
 
-    case ANIM_IR_PARA_FRENTE: 
+    case ANIM_IR_PARA_FRENTE:
     {
         static int primeiraVezFrente = 1;
         static float oX = 0.0, oZ = 0.0;
@@ -189,11 +188,11 @@ void animacao_atualizar(void)
         }
         float t = tempo_estado / 2.5;
         if (t >= 1.0) t = 1.0;
-        float xFinal = cadeiraX;  
-        float zFinal = cadeiraZ + 2.0;  
+        float xFinal = cadeiraX;
+        float zFinal = cadeiraZ + 2.0;
         float x = lerp(oX, xFinal, t);
         float z = lerp(oZ, zFinal, t);
-        float y = inicioY + sin(t * 3.14159) * 0.02; 
+        float y = inicioY + sin(t * 3.14159) * 0.02;
         camera_set_posicao(x, y, z);
         float alvoX = lerp(cadeiraX, 0.0, t);
         float alvoY = lerp(cadeiraY + 0.6, 1.5, t);
@@ -202,7 +201,7 @@ void animacao_atualizar(void)
         if (t >= 1.0)
         {
             primeiraVezFrente = 1;
-            estado = ANIM_SENTANDO_CAMERA; 
+            estado = ANIM_SENTANDO_CAMERA;
             tempo_estado = 0.0;
         }
         break;
@@ -223,7 +222,7 @@ void animacao_atualizar(void)
         float t = tempo_estado / 2.0;
         if (t >= 1.0) t = 1.0;
         float x = lerp(oX, cadeiraX, t);
-        float z = lerp(oZ, cadeiraZ + 0.2, t); 
+        float z = lerp(oZ, cadeiraZ + 0.2, t);
         float y = lerp(oY, cadeiraY + 0.85, t);
         camera_set_posicao(x, y, z);
         camera_set_alvo(0.0, 1.5, telaZ);
@@ -240,10 +239,8 @@ void animacao_atualizar(void)
     {
         float t = tempo_estado / 0.5;
         if (t >= 1.0) t = 1.0;
-
         camera_set_posicao(cadeiraX, cadeiraY + 0.85, cadeiraZ + 0.2);
         camera_set_alvo(0, 1.5, telaZ);
-
         if (t >= 1.0)
         {
             estado = ANIM_ESCURECENDO;
@@ -252,11 +249,10 @@ void animacao_atualizar(void)
         break;
     }
 
-    case ANIM_ESCURECENDO: 
+    case ANIM_ESCURECENDO:
     {
         float t = tempo_estado / 3.0;
         if (t >= 1.0) t = 1.0;
-
         if (t >= 1.0)
         {
             estado = ANIM_PROJETANDO;
@@ -265,9 +261,43 @@ void animacao_atualizar(void)
         break;
     }
 
-    case ANIM_PROJETANDO: 
+    // "Studio Maria Ana Apresenta" — dura 4s (3s visivel + 1s fade out)
+    case ANIM_PROJETANDO:
     {
         if (tempo_estado >= 4.0)
+        {
+            estado = ANIM_CREDITOS;
+            tempo_estado = 0.0;
+        }
+        break;
+    }
+
+    // "Projeto final de Computacao Grafica..." — dura 5s
+    case ANIM_CREDITOS:
+    {
+        if (tempo_estado >= 5.0)
+        {
+            estado = ANIM_TITULO_FORMAS;
+            tempo_estado = 0.0;
+        }
+        break;
+    }
+
+    // "Formas Geometricas" — dura 3s
+    case ANIM_TITULO_FORMAS:
+    {
+        if (tempo_estado >= 3.0)
+        {
+            estado = ANIM_FORMAS;
+            tempo_estado = 0.0;
+        }
+        break;
+    }
+
+    // animacao de formas geometricas — roda ate ANIM_FIM
+    case ANIM_FORMAS:
+    {
+        if (tempo_estado >= 12.0)
         {
             estado = ANIM_FIM;
             tempo_estado = 0.0;
@@ -289,49 +319,95 @@ EstadoAnimacao animacao_get_estado(void)
 {
     return estado;
 }
+
 float animacao_get_intensidade_luz(void)
 {
-    if (estado == ANIM_ESCURECENDO || estado == ANIM_PROJETANDO || estado == ANIM_FIM)
+    if (estado >= ANIM_ESCURECENDO && estado != ANIM_FIM)
     {
         float t = (estado == ANIM_ESCURECENDO) ? tempo_estado / 3.0 : 1.0;
         if (t > 1.0) t = 1.0;
-        return 1.0 - (t * 0.95); 
+        return 1.0 - (t * 0.95);
     }
     return 1.0;
 }
 
 float animacao_get_escurecimento(void)
 {
-   if (estado == ANIM_ESCURECENDO || estado == ANIM_PROJETANDO || estado == ANIM_FIM)
+    if (estado >= ANIM_ESCURECENDO && estado != ANIM_FIM)
     {
         float t = (estado == ANIM_ESCURECENDO) ? tempo_estado / 3.0 : 1.0;
         if (t > 1.0) t = 1.0;
-        return t * 0.95; 
+        return t * 0.95;
     }
     return 0.0;
 }
 
+// "Studio Maria Ana Apresenta" — fade in nos primeiros 1s, visivel ate 3s, fade out ate 4s
 int animacao_get_texto_visivel(void)
 {
-    if (estado == ANIM_PROJETANDO && tempo_estado < 3.0)
-    {
+    if (estado == ANIM_PROJETANDO && tempo_estado < 4.0)
         return 1;
-    }
     return 0;
+}
+
+// fade in/out generico para textos da tela (0.0 a 1.0)
+float animacao_get_alpha_tela(void)
+{
+    float FADE = 0.8f; // segundos de fade
+
+    if (estado == ANIM_PROJETANDO)
+    {
+        if (tempo_estado < FADE) return tempo_estado / FADE;
+        if (tempo_estado < 3.0f) return 1.0f;
+        return 1.0f - (tempo_estado - 3.0f) / FADE;
+    }
+    if (estado == ANIM_CREDITOS)
+    {
+        if (tempo_estado < FADE) return tempo_estado / FADE;
+        if (tempo_estado < 4.0f) return 1.0f;
+        return 1.0f - (tempo_estado - 4.0f) / FADE;
+    }
+    if (estado == ANIM_TITULO_FORMAS)
+    {
+        if (tempo_estado < FADE) return tempo_estado / FADE;
+        if (tempo_estado < 2.2f) return 1.0f;
+        return 1.0f - (tempo_estado - 2.2f) / FADE;
+    }
+    return 1.0f;
+}
+
+int animacao_get_creditos_visivel(void)
+{
+    return (estado == ANIM_CREDITOS);
+}
+
+int animacao_get_titulo_formas_visivel(void)
+{
+    return (estado == ANIM_TITULO_FORMAS);
+}
+
+int animacao_get_formas_visivel(void)
+{
+    return (estado == ANIM_FORMAS);
+}
+
+float animacao_get_tempo_formas(void)
+{
+    if (estado == ANIM_FORMAS)
+        return tempo_estado;
+    return 0.0f;
 }
 
 float animacao_get_inclinacao_cadeira(void)
 {
-    if(estado == ANIM_SENTANDO)
+    if (estado == ANIM_SENTANDO)
     {
         float t = tempo_estado / 2.0;
-        if(t > 1.0) t = 1.0;
-        return t * 18.0;  
+        if (t > 1.0) t = 1.0;
+        return t * 18.0;
     }
-    if(estado > ANIM_SENTANDO && estado <= ANIM_FIM)
-    {
-        return 18.0;  
-    }
+    if (estado > ANIM_SENTANDO && estado <= ANIM_FIM)
+        return 18.0;
     return 0.0;
 }
 
@@ -343,10 +419,7 @@ float animacao_get_abertura_porta(void)
         if (t > 1.0) t = 1.0;
         return t * 90.0;
     }
-    
     if (estado > ANIM_ABRINDO_PORTA)
-    {
         return 90.0;
-    }
     return 0.0;
 }
