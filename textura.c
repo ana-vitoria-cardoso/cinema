@@ -15,7 +15,7 @@ IMAGE *textureImage = NULL;
 void carregarTexturas() {
     
     glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-    //parede
+    // parede
     textureImage = ImageLoad("wall.rgb");
   {
         glGenTextures(1, &textureIDParede);
@@ -40,7 +40,7 @@ void carregarTexturas() {
         free(textureImage);
         textureImage = NULL;
     }
-    //chao
+    // chao
     textureImage = ImageLoad("chao.rgb");
   {        
         glGenTextures(1, &textureIDChao);
@@ -72,7 +72,7 @@ void toggleTexturas() {
     glutPostRedisplay();  
 }
 
-//função com normal específica para cada parede
+// função com normal específica para cada parede
 void aplicarTexturaNaParede(float x1, float y1, float z1, float x2, float y2, float z2, float repX, float repY, int paredeTipo) {
     glBegin(GL_QUADS);
     

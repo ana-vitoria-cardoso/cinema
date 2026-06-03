@@ -52,7 +52,8 @@ void animacao_atualizar(void)
     case ANIM_ABRINDO_PORTA:
     {
         float t = tempo_estado / 2.0;
-        if (t >= 1.0) t = 1.0;
+        if (t >= 1.0)
+            t = 1.0;
         camera_set_posicao(inicioX, inicioY, inicioZ);
         camera_set_alvo(inicioX, inicioY, inicioZ - 5);
         if (t >= 1.0)
@@ -76,7 +77,8 @@ void animacao_atualizar(void)
     case ANIM_ANDANDO_Z:
     {
         float t = tempo_estado / 8.0;
-        if (t >= 1.0) t = 1.0;
+        if (t >= 1.0)
+            t = 1.0;
 
         float z = lerp(inicioZ, -4.5, t);
         float x = inicioX;
@@ -113,7 +115,8 @@ void animacao_atualizar(void)
         }
 
         float t = tempo_estado / 6.0;
-        if (t >= 1.0) t = 1.0;
+        if (t >= 1.0)
+            t = 1.0;
 
         float x = lerp(etapaX, cadeiraX, t);
         float z = -8.0;
@@ -144,7 +147,8 @@ void animacao_atualizar(void)
         }
 
         float t = tempo_estado / 2.0;
-        if (t >= 1.0) t = 1.0;
+        if (t >= 1.0)
+            t = 1.0;
         float xFinal = cadeiraX - 2.5;
         float zFinal = cadeiraZ - 0.14;
         float x = lerp(oX, xFinal, t);
@@ -163,7 +167,8 @@ void animacao_atualizar(void)
     case ANIM_SENTANDO:
     {
         float t = tempo_estado / 2.0;
-        if (t >= 1.0) t = 1.0;
+        if (t >= 1.0)
+            t = 1.0;
         float xLateral = cadeiraX - 2.5;
         float zLateral = cadeiraZ - 0.14;
         camera_set_posicao(xLateral, inicioY, zLateral);
@@ -187,7 +192,8 @@ void animacao_atualizar(void)
             primeiraVezFrente = 0;
         }
         float t = tempo_estado / 2.5;
-        if (t >= 1.0) t = 1.0;
+        if (t >= 1.0)
+            t = 1.0;
         float xFinal = cadeiraX;
         float zFinal = cadeiraZ + 2.0;
         float x = lerp(oX, xFinal, t);
@@ -220,7 +226,8 @@ void animacao_atualizar(void)
             primeiraVezS = 0;
         }
         float t = tempo_estado / 2.0;
-        if (t >= 1.0) t = 1.0;
+        if (t >= 1.0)
+            t = 1.0;
         float x = lerp(oX, cadeiraX, t);
         float z = lerp(oZ, cadeiraZ + 0.2, t);
         float y = lerp(oY, cadeiraY + 0.85, t);
@@ -238,7 +245,8 @@ void animacao_atualizar(void)
     case ANIM_OLHANDO_TELA:
     {
         float t = tempo_estado / 0.5;
-        if (t >= 1.0) t = 1.0;
+        if (t >= 1.0)
+            t = 1.0;
         camera_set_posicao(cadeiraX, cadeiraY + 0.85, cadeiraZ + 0.2);
         camera_set_alvo(0, 1.5, telaZ);
         if (t >= 1.0)
@@ -252,7 +260,8 @@ void animacao_atualizar(void)
     case ANIM_ESCURECENDO:
     {
         float t = tempo_estado / 3.0;
-        if (t >= 1.0) t = 1.0;
+        if (t >= 1.0)
+            t = 1.0;
         if (t >= 1.0)
         {
             estado = ANIM_PROJETANDO;
@@ -283,7 +292,7 @@ void animacao_atualizar(void)
         break;
     }
 
-    // "Formas Geometricas" — dura 3s
+    // "Fundo do Mar" — dura 3s
     case ANIM_TITULO_FORMAS:
     {
         if (tempo_estado >= 3.0)
@@ -294,10 +303,10 @@ void animacao_atualizar(void)
         break;
     }
 
-    // animacao de formas geometricas — roda ate ANIM_FIM
+    // animacao de fundo do mar — roda por ~65s
     case ANIM_FORMAS:
     {
-        if (tempo_estado >= 10.0)
+        if (tempo_estado >= 65.0)
         {
             estado = ANIM_FIM_TEXTO;
             tempo_estado = 0.0;
@@ -331,7 +340,8 @@ void animacao_atualizar(void)
         }
 
         float t = tempo_estado / 3.0;
-        if (t >= 1.0) t = 1.0;
+        if (t >= 1.0)
+            t = 1.0;
 
         float x = lerp(oX, 0.0, t);
         float y = lerp(oY, 5.0, t);
@@ -368,13 +378,15 @@ float animacao_get_intensidade_luz(void)
     if (estado == ANIM_APAGANDO)
     {
         float t = tempo_estado / 3.0;
-        if (t > 1.0) t = 1.0;
+        if (t > 1.0)
+            t = 1.0;
         return t * 0.05; // sala continua quase escura
     }
     if (estado >= ANIM_ESCURECENDO && estado != ANIM_FIM)
     {
         float t = (estado == ANIM_ESCURECENDO) ? tempo_estado / 3.0 : 1.0;
-        if (t > 1.0) t = 1.0;
+        if (t > 1.0)
+            t = 1.0;
         return 1.0 - (t * 0.95);
     }
     return 1.0;
@@ -387,7 +399,8 @@ float animacao_get_escurecimento(void)
     if (estado >= ANIM_ESCURECENDO && estado != ANIM_FIM)
     {
         float t = (estado == ANIM_ESCURECENDO) ? tempo_estado / 3.0 : 1.0;
-        if (t > 1.0) t = 1.0;
+        if (t > 1.0)
+            t = 1.0;
         return t * 0.95;
     }
     return 0.0;
@@ -408,26 +421,34 @@ float animacao_get_alpha_tela(void)
 
     if (estado == ANIM_PROJETANDO)
     {
-        if (tempo_estado < FADE) return tempo_estado / FADE;
-        if (tempo_estado < 3.0f) return 1.0f;
+        if (tempo_estado < FADE)
+            return tempo_estado / FADE;
+        if (tempo_estado < 3.0f)
+            return 1.0f;
         return 1.0f - (tempo_estado - 3.0f) / FADE;
     }
     if (estado == ANIM_CREDITOS)
     {
-        if (tempo_estado < FADE) return tempo_estado / FADE;
-        if (tempo_estado < 4.0f) return 1.0f;
+        if (tempo_estado < FADE)
+            return tempo_estado / FADE;
+        if (tempo_estado < 4.0f)
+            return 1.0f;
         return 1.0f - (tempo_estado - 4.0f) / FADE;
     }
     if (estado == ANIM_TITULO_FORMAS)
     {
-        if (tempo_estado < FADE) return tempo_estado / FADE;
-        if (tempo_estado < 2.2f) return 1.0f;
+        if (tempo_estado < FADE)
+            return tempo_estado / FADE;
+        if (tempo_estado < 2.2f)
+            return 1.0f;
         return 1.0f - (tempo_estado - 2.2f) / FADE;
     }
     if (estado == ANIM_FIM_TEXTO)
     {
-        if (tempo_estado < FADE) return tempo_estado / FADE;
-        if (tempo_estado < 4.0f) return 1.0f;
+        if (tempo_estado < FADE)
+            return tempo_estado / FADE;
+        if (tempo_estado < 4.0f)
+            return 1.0f;
         return 1.0f - (tempo_estado - 4.0f) / FADE;
     }
     return 1.0f;
@@ -460,7 +481,8 @@ float animacao_get_inclinacao_cadeira(void)
     if (estado == ANIM_SENTANDO)
     {
         float t = tempo_estado / 2.0;
-        if (t > 1.0) t = 1.0;
+        if (t > 1.0)
+            t = 1.0;
         return t * 18.0;
     }
     if (estado > ANIM_SENTANDO && estado <= ANIM_FIM)
@@ -473,7 +495,8 @@ float animacao_get_abertura_porta(void)
     if (estado == ANIM_ABRINDO_PORTA)
     {
         float t = tempo_estado / 1.5;
-        if (t > 1.0) t = 1.0;
+        if (t > 1.0)
+            t = 1.0;
         return t * 90.0;
     }
     if (estado > ANIM_ABRINDO_PORTA)
@@ -491,7 +514,8 @@ float animacao_get_alpha_apagando(void)
     if (estado == ANIM_APAGANDO)
     {
         float t = tempo_estado / 3.0;
-        if (t > 1.0) t = 1.0;
+        if (t > 1.0)
+            t = 1.0;
         return t; // 0.0 = visivel, 1.0 = tela totalmente preta
     }
     if (estado == ANIM_FIM)

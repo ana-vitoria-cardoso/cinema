@@ -17,8 +17,8 @@ typedef enum {
     ANIM_ESCURECENDO,
     ANIM_PROJETANDO,        // "Studio Maria Ana Apresenta"
     ANIM_CREDITOS,          // "Projeto final de computacao grafica..."
-    ANIM_TITULO_FORMAS,     // "Formas Geometricas"
-    ANIM_FORMAS,            // animacao de formas na tela
+    ANIM_TITULO_FORMAS,     // "Fundo do Mar"
+    ANIM_FORMAS,            // animacao fundo do mar
     ANIM_FIM_TEXTO,         // "Fim! Obrigada!"
     ANIM_APAGANDO,          // camera recua, tela apaga
     ANIM_FIM

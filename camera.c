@@ -17,12 +17,6 @@ float distancia = 22.0;
 int ultimoX, ultimoY;
 int botaoPressionado = 0;
 
-void initCamera() {
-    anguloY = 0.0;
-    anguloX = 0.0;
-    distancia = 22.0;
-}
-
 void controlarCameraTeclado(unsigned char key, int x, int y) {
     switch (key) {
         case 'w': case 'W':
